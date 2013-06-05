@@ -1,0 +1,48 @@
+import static com.googlecode.javacv.cpp.opencv_core.*;
+
+import static com.googlecode.javacv.cpp.opencv_highgui.cvSaveImage;
+import com.googlecode.javacv.CanvasFrame;
+import com.googlecode.javacv.FrameGrabber;
+import com.googlecode.javacv.VideoInputFrameGrabber;
+import com.googlecode.javacv.cpp.opencv_core.IplImage;
+import com.googlecode.javacv.OpenCVFrameGrabber;
+import java.awt.event.KeyEvent;
+import com.googlecode.javacv.cpp.opencv_core.IplImage;
+import static com.googlecode.javacv.cpp.opencv_highgui.*;
+
+//SERIES OF IMAGES//
+public class GrabberShow {
+	 static CanvasFrame canvas = new CanvasFrame("Web Cam");
+	
+    private static void captureFrame() {
+    	int i=0;
+        // 0-default camera, 1 - next...so on
+        final OpenCVFrameGrabber grabber = new OpenCVFrameGrabber(0);
+     for(i=0;i<=21;)
+      {
+        try {
+            grabber.start();
+         //   CvWaitkey(20);  this is not working as of now..!!
+            KeyEvent key = canvas.waitKey(50);
+            if (key != null) return;
+            IplImage img = grabber.grab();
+            if (img != null) {
+            	{
+            		cvFlip(img, img, 1); // take mirror image cuz webcame takes horizontally inveted
+            	 cvSaveImage((i++)+"-me.jpg", img); //save the image
+            	// Thread.sleep(1);
+            	 canvas.showImage(img); //display the image stored on screen
+            }
+            	 canvas.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+       }
+      //  if(i>=20)
+       // 	i=0;
+    }
+    }
+    public static void main(String[] args) {
+        captureFrame();
+    }
+}
